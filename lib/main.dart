@@ -1,4 +1,4 @@
-import 'package:crud_api_project/home_scren.dart';
+import 'package:crud_api_project/screen/home_scren.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,6 +10,10 @@ class CrudApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: "crud_app", home: homeScreen());
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: "crud_app",
+      home: homeScreen(),
+    );
   }
 }
