@@ -12,6 +12,8 @@ class homeScreen extends StatefulWidget {
 class _homeScreenState extends State<homeScreen> {
   @override
   Widget build(BuildContext context) {
+    ProductMenu option = ProductMenu.update;
+    ProductMenu option2 = ProductMenu.delete;
     return Scaffold(
       appBar: AppBar(title: Text("product list")),
       body: ListView.separated(
@@ -30,7 +32,26 @@ class _homeScreenState extends State<homeScreen> {
                 ),
               ],
             ),
-            trailing: Icon(Icons.edit),
+            trailing: PopupMenuButton<ProductMenu>(
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    value: ProductMenu.update,
+                    child: Text("update"),
+                  ),
+                  PopupMenuItem(
+                    value: ProductMenu.delete,
+                    child: Text("delete"),
+                  ),
+                ];
+              },
+              onSelected: (ProductMenu SelectOption) {
+                if (SelectOption == ProductMenu.update) {
+                } else if (SelectOption == ProductMenu.delete) {
+                  print("delete");
+                }
+              },
+            ),
           );
         },
         separatorBuilder: (BuildContext context, int index) {
@@ -49,3 +70,5 @@ class _homeScreenState extends State<homeScreen> {
     );
   }
 }
+
+enum ProductMenu { update, delete }
