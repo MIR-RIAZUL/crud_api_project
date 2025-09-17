@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'add_new_product.dart';
+
 class homeScreen extends StatefulWidget {
   const homeScreen({super.key});
 
@@ -36,7 +38,12 @@ class _homeScreenState extends State<homeScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddNewProduct()),
+          );
+        },
         child: Icon(Icons.add),
       ),
     );
