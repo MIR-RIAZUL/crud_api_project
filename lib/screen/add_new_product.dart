@@ -37,6 +37,12 @@ class _addNewProductState extends State<addNewProduct> {
                     hintText: "product name",
                     labelText: "product name",
                   ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter product name';
+                    }
+                    return null;
+                  },
                 ),
 
                 TextFormField(
@@ -46,6 +52,12 @@ class _addNewProductState extends State<addNewProduct> {
                     hintText: "product code",
                     labelText: "product code",
                   ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter product code';
+                    }
+                    return null;
+                  },
                 ),
 
                 TextFormField(
@@ -56,6 +68,12 @@ class _addNewProductState extends State<addNewProduct> {
                     hintText: "quantity",
                     labelText: "quantity",
                   ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter quantity';
+                    }
+                    return null;
+                  },
                 ),
 
                 TextFormField(
@@ -66,6 +84,12 @@ class _addNewProductState extends State<addNewProduct> {
                     hintText: "unit price",
                     labelText: "unit price",
                   ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter unit price';
+                    }
+                    return null;
+                  },
                 ),
 
                 TextFormField(
@@ -74,6 +98,12 @@ class _addNewProductState extends State<addNewProduct> {
                     hintText: "image url",
                     labelText: "image url",
                   ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter image url';
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(height: 10),
                 Visibility(
@@ -93,6 +123,9 @@ class _addNewProductState extends State<addNewProduct> {
   }
 
   Future<void> _onTapAddProduct() async {
+    if (_formKey.currentState!.validate() == false) {
+      return;
+    }
     AddProductInProgress = true;
     setState(() {});
 
