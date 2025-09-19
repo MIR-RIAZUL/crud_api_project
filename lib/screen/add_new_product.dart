@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
+import '../widgets/Snacbar_massage.dart';
+
 class addNewProduct extends StatefulWidget {
   const addNewProduct({super.key});
 
@@ -153,14 +155,10 @@ class _addNewProductState extends State<addNewProduct> {
       final decodeJson = jsonDecode(response.body);
       if (decodeJson['status'] == 'success') {
         _clearTextFields();
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("product added successfully")));
+        showSnackBarMassage(context, "product added successfully");
       } else {
         String message = decodeJson['data'];
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(message)));
+        showSnackBarMassage(context, message);
       }
     }
 
