@@ -119,7 +119,7 @@ class _addNewProductState extends State<addNewProduct> {
     if (response.statusCode == 200) {
       final decodeJson = jsonDecode(response.body);
       if (decodeJson['status'] == 'success') {
-        _clearForm();
+        _clearTextFields();
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text("product added successfully")));
@@ -135,20 +135,23 @@ class _addNewProductState extends State<addNewProduct> {
     setState(() {});
   }
 
-  void _clearForm() {
+  @override
+  dispose() {
+    _nameController.dispose();
+    _codeController.dispose();
+    _quantityController.dispose();
+    _priceController.dispose();
+    _imageUrlController.dispose();
+    super.dispose();
+  }
+
+  void _clearTextFields() {
     _nameController.clear();
     _codeController.clear();
     _quantityController.clear();
     _priceController.clear();
     _imageUrlController.clear();
 
-    dispose() {
-      _nameController.dispose();
-      _codeController.dispose();
-      _quantityController.dispose();
-      _priceController.dispose();
-      _imageUrlController.dispose();
-      super.dispose();
-    }
+    setState(() {});
   }
 }
