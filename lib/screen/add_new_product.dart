@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 class addNewProduct extends StatefulWidget {
   const addNewProduct({super.key});
@@ -8,6 +11,7 @@ class addNewProduct extends StatefulWidget {
 }
 
 class _addNewProductState extends State<addNewProduct> {
+  bool AddProductInProgress = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _codeController = TextEditingController();
@@ -72,7 +76,14 @@ class _addNewProductState extends State<addNewProduct> {
                   ),
                 ),
                 SizedBox(height: 10),
-                FilledButton(onPressed: () {}, child: Text("add new product")),
+                Visibility(
+                  visible: AddProductInProgress == false,
+                  replacement: Center(child: CircularProgressIndicator()),
+                  child: FilledButton(
+                    onPressed: _onTapAddProduct,
+                    child: Text("add new product"),
+                  ),
+                ),
               ],
             ),
           ),
@@ -81,12 +92,63 @@ class _addNewProductState extends State<addNewProduct> {
     );
   }
 
-  dispose() {
-    _nameController.dispose();
-    _codeController.dispose();
-    _quantityController.dispose();
-    _priceController.dispose();
-    _imageUrlController.dispose();
-    super.dispose();
+  Future<void> _onTapAddProduct() async {
+    AddProductInProgress = true;
+    setState(() {});
+
+    //prepare url to request
+    Uri uri = Uri.parse("http://35.73.30.144:2008/api/v1/CreateProduct");
+    //prepare data
+    Map<String, dynamic> requestBody = {
+      "ProductName": _nameController.text,
+      "ProductCode": int.parse(_codeController.text),
+      "Img": _imageUrlController.text,
+      "Qty": int.parse(_quantityController.text),
+      "UnitPrice": int.parse(_priceController.text),
+      "TotalPrice":
+          (int.parse(_quantityController.text) *
+          double.parse(_priceController.text)),
+    };
+    Response response = await post(
+      uri,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(requestBody),
+    );
+    print(response.statusCode);
+    print(response.body);
+    if (response.statusCode == 200) {
+      final decodeJson = jsonDecode(response.body);
+      if (decodeJson['status'] == 'success') {
+        _clearForm();
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("product added successfully")));
+      } else {
+        String message = decodeJson['data'];
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(message)));
+      }
+    }
+
+    AddProductInProgress = false;
+    setState(() {});
+  }
+
+  void _clearForm() {
+    _nameController.clear();
+    _codeController.clear();
+    _quantityController.clear();
+    _priceController.clear();
+    _imageUrlController.clear();
+
+    dispose() {
+      _nameController.dispose();
+      _codeController.dispose();
+      _quantityController.dispose();
+      _priceController.dispose();
+      _imageUrlController.dispose();
+      super.dispose();
+    }
   }
 }
